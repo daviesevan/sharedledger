@@ -1,0 +1,15 @@
+.env
+venv/
+app/auth/__pycache__/
+app/categories/__pycache__/
+app/expenses/__pycache__/
+app/groups/__pycache__/
+app/notifications/__pycache__/
+app/recurring/__pycache__/
+app/reports/__pycache__/
+app/settlements/__pycache__/
+app/users/__pycache__/
+app/sharedExpenses/__pycache__/
+app/__pycache__/
+instance/
+__pycache__/
