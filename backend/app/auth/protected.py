@@ -12,6 +12,7 @@ def protected():
     current_user_id = get_jwt_identity()
     return jsonify(message=f"Access granted for user with ID: {current_user_id}"), 200
 
+
 @protectedBp.route('/refresh/token', methods=['POST'])
 @jwt_required(refresh=True)
 def refresh_token():

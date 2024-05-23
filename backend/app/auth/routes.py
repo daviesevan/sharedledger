@@ -16,12 +16,12 @@ authBp = Blueprint('auth', __name__)
 def login():
     try:
         data = request.json
-        email_or_phone = data.get('email_or_phone')
+        email = data.get('email')
         password = data.get('password')
         errors = []
 
-        if not email_or_phone:
-            errors.append('Email or Phone number is required')
+        if not email:
+            errors.append('Email is required')
 
         if not password:
             errors.append('Password is required')
@@ -29,10 +29,10 @@ def login():
         if errors:
             return jsonify(errors=errors), 400
 
-        user = User.query.filter((User.email == email_or_phone) | (User.phonenumber == email_or_phone)).first()
+        user = User.query.filter(User.email == email).first()
 
         if not user:
-            return jsonify(error='Invalid email or phone number'), 401
+            return jsonify(error='Invalid email'), 401
 
         if not verify_password(password, user.password):
             return jsonify(error='Invalid password'), 401

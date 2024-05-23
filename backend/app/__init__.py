@@ -20,9 +20,11 @@ def create_app():
 
     from app.auth.routes import authBp
     from app.auth.protected import protectedBp
+    from app.users.routes import userBp
 
     app.register_blueprint(authBp, url_prefix='/api/auth')
     app.register_blueprint(protectedBp, url_prefix='/api')
+    app.register_blueprint(userBp, url_prefix="/api/u/")
 
     with app.app_context():
         db.create_all()
