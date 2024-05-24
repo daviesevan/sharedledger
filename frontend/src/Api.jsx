@@ -8,6 +8,11 @@ const api = axios.create({
   baseURL,
 });
 
+// Create a separate instance for token refresh
+const refreshApi = axios.create({
+  baseURL,
+});
+
 // Add a request interceptor to add authorization headers for access tokens
 api.interceptors.request.use(
   (config) => {
@@ -27,3 +32,4 @@ api.interceptors.request.use(
 );
 
 export default api;
+export { refreshApi };

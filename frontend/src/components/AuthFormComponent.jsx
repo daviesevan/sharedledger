@@ -8,7 +8,7 @@ const AuthFormComponent = ({ route, method }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phonenumber, setPhone] = useState("");
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const AuthFormComponent = ({ route, method }) => {
   const formData = {
     email,
     password,
-    ...(method === "register" && { username, phone }),
+    ...(method === "register" && { username, phonenumber }),
   };
 
   const handleSubmit = async (e) => {
@@ -27,26 +27,34 @@ const AuthFormComponent = ({ route, method }) => {
       if (method === "login") {
         localStorage.setItem("access_token", res.data.access_token);
         localStorage.setItem("refresh_token", res.data.refresh_token);
-        navigate("/dashboard");
+        // Display success message and redirect to login page
+        toast.success("Login successful!");
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 1500);
       } else {
-        if (res.data.error === "Email already exists") {
-          toast.error("Email already exists! Try loggin in!");
+        if (res.data.errors === "Email already exists") {
+          toast.error("Email already exists! Try logging in!");
           setTimeout(() => {
             navigate("/login");
           }, 500);
-        }
-        if (res.data.error === "Phone number already exists") {
+        } else if (res.data.errors === "Phone number already exists") {
           toast.error("Phone number already exists. Please use another one!");
+        } else {
+          // Display success message and redirect to login page
+          toast.success("Account created successfully!");
+          setTimeout(() => {
+            navigate("/login");
+          }, 1500);
         }
       }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         setErrors(error.response.data.error);
+        setTimeout(() => {
+          setErrors("");
+        }, 3000);
       }
-      setErrors("Incorrect Email or Password!");
-      setTimeout(() => {
-        setErrors("");
-      }, 3000);
     } finally {
       setLoading(false);
     }
@@ -115,8 +123,8 @@ const AuthFormComponent = ({ route, method }) => {
                   <input
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     type="tel"
-                    placeholder="Your phone number"
-                    value={phone}
+                    placeholder="Your phone number number"
+                    value={phonenumber}
                     onChange={(e) => setPhone(e.target.value)}
                     required
                   />

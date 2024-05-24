@@ -3,7 +3,7 @@ import AuthFormComponent from '../components/AuthFormComponent'
 
 const SignUpPage = () => {
   return (
-    <div><AuthFormComponent method="register" route="/auth/signup" /></div>
+    <div><AuthFormComponent method="register" route="/api/auth/signup" /></div>
   )
 }
 

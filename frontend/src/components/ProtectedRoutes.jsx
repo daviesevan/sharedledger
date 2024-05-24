@@ -1,27 +1,30 @@
 import React, { useEffect, useState } from "react";
-import api from "../Api";
+import { refreshApi } from "../Api";
 import { useLocation, Navigate } from "react-router-dom";
-import {jwtDecode} from "jwt-decode"; 
+import {jwtDecode} from "jwt-decode";
 import Loading from "./Loading";
 
 const ProtectedRoutes = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const location = useLocation();
 
   const refreshToken = async () => {
-    const token = localStorage.getItem("refresh_token");
-    console.log("Found the refresh token: ", token);
+    const refreshToken = localStorage.getItem("refresh_token");
+    setIsRefreshing(true);
+
     try {
-      const res = await api.post(
+      const res = await refreshApi.post(
         "/api/refresh/token",
         {},
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${refreshToken}`,
           },
         }
       );
+
       if (res.data.access_token) {
         localStorage.setItem("access_token", res.data.access_token);
         console.log("New Access Token:", res.data.access_token);
@@ -33,6 +36,8 @@ const ProtectedRoutes = ({ children }) => {
     } catch (error) {
       console.error("Error in refresh token request:", error);
       setIsAuthenticated(false);
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -65,9 +70,11 @@ const ProtectedRoutes = ({ children }) => {
   };
 
   const scheduleTokenRefresh = (timeout) => {
-    setTimeout(async () => {
-      await refreshToken();
-    }, timeout);
+    if (!isRefreshing) {
+      setTimeout(async () => {
+        await refreshToken();
+      }, timeout);
+    }
   };
 
   useEffect(() => {
