@@ -21,10 +21,14 @@ def create_app():
     from app.auth.routes import authBp
     from app.auth.protected import protectedBp
     from app.users.routes import userBp
+    from app.savings.routes import savings_account_bp
+    from app.reports.routes import reportsBp
 
     app.register_blueprint(authBp, url_prefix='/api/auth')
     app.register_blueprint(protectedBp, url_prefix='/api')
     app.register_blueprint(userBp, url_prefix="/api/u/")
+    app.register_blueprint(savings_account_bp)
+    app.register_blueprint(reportsBp)
 
     with app.app_context():
         db.create_all()

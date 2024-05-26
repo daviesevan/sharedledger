@@ -12,7 +12,7 @@ const Loading = ({ loading, size = 35 }) => {
           aria-label="Loading Spinner"
           data-testid="loader"
         />
-        <p className="mt-4 text-gray-900 text-lg font-semibold">Loading...</p>
+        {/* <p className="mt-4 text-gray-900 text-lg font-semibold">Loading...</p> */}
       </div>
     </div>
   );

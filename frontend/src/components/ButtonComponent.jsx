@@ -19,7 +19,7 @@ const ButtonComponent = ({ onClick, text, loading }) => {
     <button
       onClick={handleClick}
       disabled={buttonLoading}
-      className="relative flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+      className="relative flex rounded-lg items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 focus:outline-none"
       style={{ width: "150px", height: "40px" }} // fixed size for button
     >
       <div

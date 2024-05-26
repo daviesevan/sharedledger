@@ -5,13 +5,14 @@ import api from "../Api";
 import toast, { Toaster } from "react-hot-toast";
 
 const AuthFormComponent = ({ route, method }) => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [phonenumber, setPhone] = useState("");
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  
 
   const formData = {
     email,
@@ -27,21 +28,19 @@ const AuthFormComponent = ({ route, method }) => {
       if (method === "login") {
         localStorage.setItem("access_token", res.data.access_token);
         localStorage.setItem("refresh_token", res.data.refresh_token);
-        // Display success message and redirect to login page
-        toast.success("Login successful!");
-        setTimeout(() => {
-          navigate("/dashboard");
-        }, 1500);
+        // toast.success("Login successful!");
+        navigate("/dashboard");
+        console.log(">>>Redirected")
       } else {
         if (res.data.errors === "Email already exists") {
           toast.error("Email already exists! Try logging in!");
           setTimeout(() => {
             navigate("/login");
           }, 500);
+          
         } else if (res.data.errors === "Phone number already exists") {
           toast.error("Phone number already exists. Please use another one!");
         } else {
-          // Display success message and redirect to login page
           toast.success("Account created successfully!");
           setTimeout(() => {
             navigate("/login");
@@ -65,8 +64,8 @@ const AuthFormComponent = ({ route, method }) => {
       <Toaster position="top-right" reverseOrder={false} />
       <section className="px-4 pb-24 mx-auto max-w-7xl">
         <header className="flex items-center justify-center py-5 mb-5 border-b border-gray-200">
-          <a href="/" title="Go to Kutty Home Page">
-            <span className="sr-only text-blue-700">Sharedledger</span>
+          <a href="/" title="Go to Home Page">
+            <span className="sr-only">Sharedledger</span>
           </a>
         </header>
         <div className="w-full py-6 mx-auto md:w-3/5 lg:w-2/5">
@@ -81,7 +80,7 @@ const AuthFormComponent = ({ route, method }) => {
                 Already have an account?
                 <Link
                   to="/login"
-                  className="text-purple-700 hover:text-purple-900"
+                  className="text-blue-700 hover:text-blue-900"
                 >
                   {" "}
                   Sign in
@@ -92,7 +91,7 @@ const AuthFormComponent = ({ route, method }) => {
                 Don't have an account?
                 <Link
                   to="/signup"
-                  className="text-purple-700 hover:text-purple-900"
+                  className="text-blue-700 hover:text-blue-900"
                 >
                   {" "}
                   Sign up
@@ -108,7 +107,7 @@ const AuthFormComponent = ({ route, method }) => {
                     Name
                   </span>
                   <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border rounded-lg border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     type="text"
                     placeholder="Your full name"
                     value={username}
@@ -121,9 +120,9 @@ const AuthFormComponent = ({ route, method }) => {
                     Your Phone
                   </span>
                   <input
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="bg-gray-50 border rounded-lg border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     type="tel"
-                    placeholder="Your phone number number"
+                    placeholder="Your phone number"
                     value={phonenumber}
                     onChange={(e) => setPhone(e.target.value)}
                     required
@@ -136,7 +135,7 @@ const AuthFormComponent = ({ route, method }) => {
                 Your Email
               </span>
               <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border rounded-lg border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 type="email"
                 placeholder="Ex. james@bond.com"
                 value={email}
@@ -150,7 +149,7 @@ const AuthFormComponent = ({ route, method }) => {
                 Create a password
               </span>
               <input
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="bg-gray-50 border rounded-lg border-gray-300 text-gray-900 sm:text-sm focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                 type="password"
                 placeholder="••••••••"
                 value={password}
@@ -158,12 +157,10 @@ const AuthFormComponent = ({ route, method }) => {
                 required
               />
             </label>
-            {errors ? (
+            {errors && (
               <p className="my-5 text-xs font-medium text-left text-red-700">
                 {errors}
               </p>
-            ) : (
-              ""
             )}
             <ButtonComponent
               onClick={handleSubmit}
@@ -175,12 +172,12 @@ const AuthFormComponent = ({ route, method }) => {
           <p className="my-5 text-xs font-medium text-center text-gray-700">
             By clicking "{method === "register" ? "Sign Up" : "Sign In"}" you
             agree to our
-            <a href="#" className="text-purple-700 hover:text-purple-900">
+            <a href="#" className="text-blue-700 hover:text-blue-900">
               {" "}
               Terms of Service
             </a>{" "}
             and
-            <a href="#" className="text-purple-700 hover:text-purple-900">
+            <a href="#" className="text-blue-700 hover:text-blue-900">
               {" "}
               Privacy Policy
             </a>

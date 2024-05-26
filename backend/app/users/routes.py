@@ -16,7 +16,7 @@ def user():
     if user:
         # Return the user's name and email
         return jsonify({
-            'name': user.username,
+            'username': user.username,
             'email': user.email
         }), 200
     else:
